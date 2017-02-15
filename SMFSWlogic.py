@@ -2,7 +2,7 @@
 """
 SMFSWlogic.py
 Author: SMFSW
-Copyright (c) 2016 SMFSW
+Copyright (c) 2016-2017 SMFSW
 
 The MIT License (MIT)
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -149,34 +149,34 @@ def gray2bin(val):
 
 
 if __name__ == "__main__":
-    print "SWAP:"
+    print("SWAP:")
     tst = 0x5AA5
-    print "Input 16: ", hex(tst)
+    print("Input 16: {}".format(hex(tst)))
     tst = swap_uint16(tst)
-    print "Swapped 16: ", hex(tst)
-    print
+    print("Swapped 16: {}".format(hex(tst)))
+    print("")
     tst = 0x5AA55AA5
-    print "Input 32: ", hex(tst)
+    print("Input 32: {}".format(hex(tst)))
     tst = swap_uint32(tst)
-    print "Swapped 32: ", hex(tst)
-    print
+    print("Swapped 32: {}".format(hex(tst)))
+    print("")
     tst = 0x5AA55AA55AA55AA5
-    print "Input 64: ", hex(tst)
+    print("Input 64: {}".format(hex(tst)))
     tst = swap_uint64(tst)
-    print "Swapped 64: ", hex(tst)
+    print("Swapped 64: {}".format(hex(tst)))
 
-    print
-    print "CONVERT:"
+    print("")
+    print("CONVERT:")
     tst8 = 0xFF
     tst16 = 0xFFFF
-    print "Conv 8 to 16: ", hex(conv_8to16(tst8))
-    print "Conv 16 to 8: ", hex(conv_16to8(tst16))
-    print "Conv 16 to 32: ", hex(conv_16upto32(tst16, 16))
+    print("Conv 8 to 16: {}".format(hex(conv_8to16(tst8))))
+    print("Conv 16 to 8: {}".format(hex(conv_16to8(tst16))))
+    print("Conv 16 to 32: {}".format(hex(conv_16upto32(tst16, 16))))
 
-    print
+    print("")
     tst = 0x101526B1
-    print "Input bin: ", hex(tst)
+    print("Input bin: {}".format(hex(tst)))
     tst = bin2gray(tst)
-    print "Grayed bin: ", hex(tst)
+    print("Grayed bin: {}".format(hex(tst)))
     tst = gray2bin(tst)
-    print "Back to bin: ", hex(tst)
+    print("Back to bin: {}".format(hex(tst)))

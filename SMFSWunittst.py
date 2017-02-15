@@ -2,7 +2,7 @@
 """
 SMFSWunittst.py
 Author: SMFSW
-Copyright (c) 2016 SMFSW
+Copyright (c) 2016-2017 SMFSW
 
 The MIT License (MIT)
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +23,8 @@ SOFTWARE.
 
 """
 
+import time
+
 
 def timetst(nbsec=0):
     """ Adds test report
@@ -34,7 +36,6 @@ def timetst(nbsec=0):
         :return: decorator """
         def decfct():
             """ :return: decorated function """
-            import time
             string = str()
             tim = time.ctime()
             string += "\nStarted {}".format(tim)
@@ -97,16 +98,39 @@ def choice(tst):
     try:
         # asserting value for exception catching
         assert tst >= 0
-        assert tst <= 2
+        assert tst <= 1
         return {
             # do not use (), otherwise each func is executed while looking up in the table
             0: fc1,
             1: fc2,
-            2: fc3,
         }[tst]
     except AssertionError:
-        print "function id not in range"
+        print("function id not in range")
+
+
+def fc1():
+    """ Test function 1 """
+    print("fc1")
+
+
+def fc2():
+    """ Test function 2 """
+    print("fc2")
 
 
 if __name__ == "__main__":
-    print
+    @timetst()
+    def iter_func():
+        j = 0
+        for i in range(10000):
+            j += int(i/2)
+
+        print("Computed value: {}".format(j))
+        return i
+
+    print(iter_func())
+
+    fc = choice(1)
+    fc()
+
+    print("")

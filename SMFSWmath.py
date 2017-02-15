@@ -2,7 +2,7 @@
 """
 SMFSWmath.py
 Author: SMFSW
-Copyright (c) 2016 SMFSW
+Copyright (c) 2016-2017 SMFSW
 
 The MIT License (MIT)
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -60,9 +60,9 @@ def scale(val, old_scale, new_scale=100):
 
 
 if __name__ == "__main__":
-    print rad2deg(pi)
-    print deg2rad(180)
-    print percent(150, 255)
-    print percent(3, 10)
-    print scale(150, 255)       # idem percent
-    print scale(3, 10, 2048)
+    print(rad2deg(pi))
+    print(deg2rad(180))
+    print(percent(150, 255))
+    print(percent(3, 10))
+    print(scale(150, 255))      # idem percent
+    print(scale(3, 10, 2048))

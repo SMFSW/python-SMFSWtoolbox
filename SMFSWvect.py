@@ -2,7 +2,7 @@
 """
 SMFSWvect.py
 Author: SMFSW
-Copyright (c) 2016 SMFSW
+Copyright (c) 2016-2017 SMFSW
 
 The MIT License (MIT)
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,12 +23,12 @@ SOFTWARE.
 
 """
 
-from math import sqrt
+from math import sqrt, radians, cos, sin
 
 
 # noinspection PyPep8Naming
 class vect(object):
-    """ Simple vector class with arithmetics """
+    """ Simple vector class (always originating from 0,0) with arithmetics """
     def __init__(self, x, y):
         """ Init vector with x, y values """
         self.x = x
@@ -50,7 +50,7 @@ class vect(object):
         try:
             assert item < 2
         except AssertionError:
-            print "Requested item is outside the vector"
+            print("Requested item is outside the vector")
             return 0
         else:
             if item == 0:
@@ -63,7 +63,7 @@ class vect(object):
         try:
             assert item < 2
         except AssertionError:
-            print "Would store value outside the vector"
+            print("Would store value outside the vector")
             return 0
         else:
             if item == 0:
@@ -75,22 +75,20 @@ class vect(object):
     def __add__(self, vect2):
         """ Add vect with a value or other vect
         :param vect2: can be value to add vector with or other vector x, y coords
-        :return: vect object """
+        :return: added self """
         if isinstance(vect2, vect):
-            x = self.x + vect2.x
-            y = self.y + vect2.y
+            self.x += vect2.x
+            self.y += vect2.y
         elif isinstance(vect2, int) or isinstance(vect2, float):
-            x = self.x + vect2
-            y = self.y + vect2
-        else:
-            return self
+            self.x += vect2
+            self.y += vect2
 
-        return vect(x, y)
+        return self
 
     def __iadd__(self, vect2):
         """ Augmented add vect with a value or other vect
         :param vect2: can be value to add vector with or other vector x, y coords
-        :return: vect object """
+        :return: added self """
         if isinstance(vect2, vect):
             self.x += vect2.x
             self.y += vect2.y
@@ -109,22 +107,20 @@ class vect(object):
     def __sub__(self, vect2):
         """ Substract vect with a value or other vect
         :param vect2: can be value to substract vector with or other vector x, y coords
-        :return: vect object """
+        :return: subtracted self """
         if isinstance(vect2, vect):
-            x = self.x - vect2.x
-            y = self.y - vect2.y
+            self.x -= vect2.x
+            self.y -= vect2.y
         elif isinstance(vect2, int) or isinstance(vect2, float):
-            x = self.x - vect2
-            y = self.y - vect2
-        else:
-            return self
+            self.x -= vect2
+            self.y -= vect2
 
-        return vect(x, y)
+        return self
 
     def __isub__(self, vect2):
         """ Augmented substract vect with a value (not very relevant) or other vect
         :param vect2: can be value to substract vector with or other vector x, y coords
-        :return: vect object """
+        :return: subtracted self """
         if isinstance(vect2, vect):
             self.x -= vect2.x
             self.y -= vect2.y
@@ -143,22 +139,20 @@ class vect(object):
     def __mul__(self, vect2):
         """ Multiply vect with a value or other vect
         :param vect2: can be value to multiply vector with or other vector x, y coords
-        :return: vect object """
+        :return: multiplied self """
         if isinstance(vect2, vect):
-            x = self.x * vect2.x
-            y = self.y * vect2.y
+            self.x *= vect2.x
+            self.y *= vect2.y
         elif isinstance(vect2, int) or isinstance(vect2, float):
-            x = self.x * vect2
-            y = self.y * vect2
-        else:
-            return self
+            self.x *= vect2
+            self.y *= vect2
 
-        return vect(x, y)
+        return self
 
     def __imul__(self, vect2):
         """ Augmented multiply vect with a coef or other vect
         :param vect2: can be coef to multiply with or other vector x, y coords
-        :return: vect object """
+        :return: multiplied self """
         if isinstance(vect2, vect):
             self.x *= vect2.x
             self.y *= vect2.y
@@ -174,10 +168,10 @@ class vect(object):
         self.x *= number
         self.y *= number
 
-    def __div__(self, vect2):
+    def __div__(self, vect2):   # works with Python 3, but not with Python 2 when using __truediv__
         """ Divide vect with a value or other vect
         :param vect2: can be value to divide vector with or other vector x, y coords
-        :return: vect object """
+        :return: divided self """
         try:
             if isinstance(vect2, vect):
                 self.x /= vect2.x
@@ -190,10 +184,10 @@ class vect(object):
 
         return self
 
-    def __idiv__(self, vect2):
+    def __itruediv__(self, vect2):  # __itruediv__ used for compatibility with Python3
         """ Augmented divide vect with a coef or other vect
         :param vect2: can be coef to divide with or other vector x, y coords
-        :return: vect object """
+        :return: divided self """
         if isinstance(vect2, vect):
             if vect2.x != 0 and vect2.y != 0:
                 self.x /= vect2.x
@@ -212,6 +206,18 @@ class vect(object):
             self.x /= number
             self.y /= number
 
+    def rotate(self, angle):
+        """ Rotate vect with given angle
+        :param angle: rotation angle (in degrees)
+        :return: rotated self """
+        rad = radians(angle)
+        tmp_x = self.x
+        tmp_y = self.y
+        self.x = round((tmp_x * cos(rad)) - (tmp_y * sin(rad)), 3)
+        self.y = round((tmp_x * sin(rad)) + (tmp_y * cos(rad)), 3)
+        del rad, tmp_x, tmp_y
+        return self
+
     def equals(self, vect2):
         """ Tests if given vect2 vector is equal to self
         :param vect2: vect2 x, y coords to compare with
@@ -223,9 +229,7 @@ class vect(object):
 
     def copy(self):
         """ :return: Returns a new instance of self """
-        x1 = self.x
-        y1 = self.y
-        return vect(x1, y1)
+        return vect(self.x, self.y)
 
     def len(self):
         """ :return: computed length from self """
@@ -249,25 +253,29 @@ if __name__ == "__main__":
     v2 = vect(100, 10)
 
     v1.add(v2)
-    print "add vectors: {}".format(v1)
+    print("add vectors: {}".format(v1))
     v2.mul(2)
-    print "mul 2nd vector: {}".format(v2)
+    print("mul 2nd vector: {}".format(v2))
     v1.sub(v2)
-    print "sub vectors: {}".format(v1)
+    print("sub vectors: {}".format(v1))
     v1.div(2)
-    print "div 1st vector: {}".format(v1)
+    print("div 1st vector: {}".format(v1))
 
     v1 += v2
-    print "add vectors: {}".format(v1)
+    print("add vectors: {}".format(v1))
     v1 = v1 + v2
-    print "add vectors: {}".format(v1)
+    print("add vectors: {}".format(v1))
     v2 = v2 + 10
-    print "add 10 to 2nd vector: {}".format(v2)
+    print("add 10 to 2nd vector: {}".format(v2))
     v2 = v2 - 10
-    print "sub 10 to 2nd vector: {}".format(v2)
+    print("sub 10 to 2nd vector: {}".format(v2))
 
     v2 -= v1
-    print "sub vectors in v2: {}".format(v2)
+    print("sub vectors in v2: {}".format(v2))
 
     v2 /= 0
-    print "tst div 0 on v2: {}".format(v2)
+    print("tst div 0 on v2: {}".format(v2))
+
+    v3 = vect(100, 10)
+    v3.rotate(90)
+    print("rotate vect v3: {}".format(v3))
