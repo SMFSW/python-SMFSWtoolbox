@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='SMFSWtoolbox',
-    version='0.1.4',
+    version='0.1.5',
     packages=[''],
     url='https://github.com/SMFSW/python-SMFSWtoolbox',
     license='MIT',

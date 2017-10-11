@@ -24,54 +24,27 @@ SOFTWARE.
 """
 
 
-def swap_uint16(val):
-    """ Byte swap val (unsigned int16)
-    :param val: value u16
-    :return: swapped u16 """
+def swap_16b(val):
+    """ Swap 16b val
+    :param val: 16b value
+    :return: swapped 16b """
     tmp = (val << 8) | (val >> 8)
     return tmp & 0xFFFF
 
 
-def swap_int16(val):
-    """ Byte swap val (int16)
-    :param val: value i16
-    :return: swapped i16 """
-    tmp = (val << 8) | ((val >> 8) & 0xFF)
-    return tmp & 0xFFFF
-
-
-def swap_uint32(val):
-    """ Byte swap val (unsigned int32)
-    :param val: value u32
-    :return: swapped u32 """
+def swap_32b(val):
+    """ Swap 32b val
+    :param val: 32b value
+    :return: swapped 32b """
     tmp = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF)
     tmp = (tmp << 16) | (tmp >> 16)
     return tmp & 0xFFFFFFFF
 
 
-def swap_int32(val):
-    """ Byte swap val (int32)
-    :param val: value i32
-    :return: swapped i32 """
-    tmp = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF)
-    tmp = (tmp << 16) | ((tmp >> 16) & 0xFFFF)
-    return tmp & 0xFFFFFFFF
-
-
-def swap_int64(val):
-    """ Byte swap val (int64)
-    :param val: value i64
-    :return: swapped i64 """
-    tmp = ((val << 8) & 0xFF00FF00FF00FF00) | ((val >> 8) & 0x00FF00FF00FF00FF)
-    tmp = ((tmp << 16) & 0xFFFF0000FFFF0000) | ((tmp >> 16) & 0x0000FFFF0000FFFF)
-    tmp = (tmp << 32) | ((tmp >> 32) & 0xFFFFFFFF)
-    return tmp & 0xFFFFFFFFFFFFFFFF
-
-
-def swap_uint64(val):
+def swap_64b(val):
     """ Byte swap val (unsigned int64)
-    :param val: value u64
-    :return: swapped u64 """
+    :param val: 64b value
+    :return: swapped 64b """
     tmp = ((val << 8) & 0xFF00FF00FF00FF00) | ((val >> 8) & 0x00FF00FF00FF00FF)
     tmp = ((tmp << 16) & 0xFFFF0000FFFF0000) | ((tmp >> 16) & 0x0000FFFF0000FFFF)
     tmp = (tmp << 32) | (tmp >> 32)
@@ -110,6 +83,16 @@ def conv_16upto32(val, nb):
     :param nb: nb of bit pseudo shifts to add
     :return: 16+n bit conversion result """
     return ((val << nb) + (val & (0xFFFF >> (16 - nb)))) & 0xFFFFFFFF
+
+
+def conv_32upto64(val, nb):
+    """ converts val (32bits) to 32+n bits (n must be comprised between 0 & 32 bits)
+    :warning: conversion output shall not exceed 32bits (input shall strictly be unsigned 32bits)
+    :warning: nb shall be in range 0-32 (note that using 0 doesn't change val)
+    :param val: 32bit var to convert
+    :param nb: nb of bit pseudo shifts to add
+    :return: 32+n bit conversion result """
+    return ((val << nb) + (val & (0xFFFFFFFF >> (32 - nb)))) & 0xFFFFFFFFFFFFFFFF
 
 
 def bin2gray(val):
@@ -152,17 +135,17 @@ if __name__ == "__main__":
     print("SWAP:")
     tst = 0x5AA5
     print("Input 16: {}".format(hex(tst)))
-    tst = swap_uint16(tst)
+    tst = swap_16b(tst)
     print("Swapped 16: {}".format(hex(tst)))
     print("")
     tst = 0x5AA55AA5
     print("Input 32: {}".format(hex(tst)))
-    tst = swap_uint32(tst)
+    tst = swap_32b(tst)
     print("Swapped 32: {}".format(hex(tst)))
     print("")
     tst = 0x5AA55AA55AA55AA5
     print("Input 64: {}".format(hex(tst)))
-    tst = swap_uint64(tst)
+    tst = swap_64b(tst)
     print("Swapped 64: {}".format(hex(tst)))
 
     print("")

@@ -23,31 +23,64 @@ SOFTWARE.
 
 """
 
+from functools import wraps
+
 
 def is_match(_lambda, pattern):
     """ Check member value before launching function """
     from re import search
-    from functools import wraps
 
     if isinstance(pattern, str):
         pattern = [pattern]     # make a list from the pattern
     elif not isinstance(pattern, list):
         return                  # return pattern is neither a string nor a list
 
-    def wrapper(fct):
-        """ wrapper
+    def decorator(fct):
+        """ decorator
         :param fct: function to be wrapped
         :return: wrapper """
         @wraps(fct)
-        def wrapped(self):
-            """ wrapped function
+        def wrapper(self):
+            """ wrapper function
             :param self: object instance
             :return: wrapped function """
             for i in pattern:
                 if callable(_lambda) and search(i, (_lambda(self) or '')):
                     return fct(self)
+        return wrapper
+    return decorator
+
+
+    # @staticmethod
+    # def catcher(err):
+    #     @wraps(fct)
+    #     def decorator(fct):
+    #         def wrapper(self, *args, **kwargs):
+    #             try:
+    #                 return fct(self, *args, **kwargs)
+    #             except err:
+    #                 return
+    #         return wrapper
+    #     return decorator
+
+
+class makeHtmlTagClass(object):
+    def __init__(self, tag, css_class=""):
+        self._tag = tag
+        self._css_class = " class='{0}'".format(css_class) \
+                          if css_class != "" else ""
+
+    def __call__(self, fn):
+        def wrapped(*args, **kwargs):
+            return "<" + self._tag + self._css_class+">"  \
+                       + fn(*args, **kwargs) + "</" + self._tag + ">"
         return wrapped
-    return wrapper
+
+
+@makeHtmlTagClass(tag="b", css_class="bold_css")
+@makeHtmlTagClass(tag="i", css_class="italic_css")
+def hello(name):
+    return "Hello, {}".format(name)
 
 
 if __name__ == "__main__":
@@ -72,3 +105,5 @@ if __name__ == "__main__":
     tst.tst1()
     tst.tst2()
     tst.tst3()
+
+    print(hello("Your name"))
