@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='SMFSWtoolbox',
-    version='0.1.5',
-    packages=[''],
+    packages=['SMFSWtoolbox'],
+    version='0.1.6',
     url='https://github.com/SMFSW/python-SMFSWtoolbox',
     license='MIT',
     author='SMFSW',
